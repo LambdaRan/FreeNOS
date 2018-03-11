@@ -36,9 +36,8 @@ private:
 public: 
     // constructor
     Callback(Base *object, Function func)
+        : m_object(object), m_function(func)
     {
-        m_object = object;
-        m_function = func;
     }
 
     virtual void execute(void *parameter)

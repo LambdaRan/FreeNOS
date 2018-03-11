@@ -24,9 +24,11 @@ class Singleton
 public: 
     // constructor
     // instance new instance of T
-    Singleton<T>(T *obj)
+    // P587 在类的代码内简化模板类名的使用， 可以直接使用模板名而不提供实参，但是在类外的成员函数定义必须提供模板实参
+    // Note: 在一个类模板的作用域内，我们可以直接使用模板名而不必指定模板实参
+    // Singleton(T *obj)
+    Singleton<T>(T *obj) : instance(obj)
     {
-        instance = obj;
     }
 
     // one and only instance 
@@ -34,6 +36,6 @@ public:
 };
 // initialize the static member obj
 template<typename T>
-T * Singleton<T>::instance = 0;
+T *Singleton<T>::instance = 0;
 
 #endif

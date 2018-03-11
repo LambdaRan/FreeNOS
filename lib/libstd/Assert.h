@@ -18,6 +18,8 @@
 #ifndef __ASSERT_H
 #define __ASSERT_H
 
+#define __ASSERT__
+
 #if defined(__ASSERT__) && !defined(__HOST__)
 
 #include "Macros.h"
@@ -43,21 +45,34 @@ extern C int __assertWrite(Address addr);
 
 // invoke __assertFailure for applications, and log() + exit() for servers
 #ifdef __SERVER__
+// #define raiseFailure(fmt, ...) \
+//     log(fmt, ##__VA_ARGS__); \
+//     exit(1);
 #define raiseFailure(fmt, ...) \
-    log(fmt, ##__VA_ARGS__); \
-    exit(1);
+    do { \
+        log(fmt, ##__VA_ARGS__); \
+        exit(1); \
+    } while(0)
 #else
 #define raiseFailure(fmt, ...) \
-    __assertFailure(fmt, ##__VA_ARGS__);
+    __assertFailure(fmt, ##__VA_ARGS__)
 #endif // __SERVER__
 
 // verify that a given expression evaluates to true
+// #define assert(exp) \
+//     if (!(exp)) \
+//     { \
+//         raiseFailure("[%s:%d]: ***Assertion '%s' failed ***\n", \
+//                         __FILE__, __LINE__, #exp); \
+//     }
 #define assert(exp) \
-    if (!(exp)) \
-    { \
-        raiseFailure("[%s:%d]: ***Assertion '%s' failed ***\n", \
-                        __FILE__, __LINE__, #exp); \
-    }
+    do { \
+        if (!(exp)) \
+        { \
+            raiseFailure("[%s:%d]: ***Assertion '%s' failed ***\n", \
+                            __FILE__, __LINE__, #exp); \
+        } \
+    } while(0)
 
 // presume that the given address is readable
 #define assertRead(addr) \
