@@ -112,6 +112,8 @@ public:
         return 0;
     }
 
+    // P501 下标运算符重载，必须时成员函数。　最好同时定义下标运算符的常量版本和非常量版本
+
     // return the item at the given position in the sequence
     const T & operator[](int i) const
     {
